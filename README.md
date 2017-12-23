@@ -1,6 +1,8 @@
 # WebSDR node based on a Raspberry PI
 This WebSDR setup covers a dual band receiver (80/40 meters bands) time-based switched. It uses a relay to switch between antennas who is managed by one GPiO pin on the Raspberry PI (using a driver transistor). 
 
+Very special thanks to Mark G4FPH and Jarek SQ9NFI for the helpful hand on configuring the progfreq setting.
+
 ### Requirements
 - Raspberry PI 3
 - Raspbian 9 installed and working
