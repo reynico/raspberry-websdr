@@ -1,0 +1,11 @@
+[Unit]
+Description=Soft hardware reset by Python
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /opt/reset.py
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

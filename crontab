@@ -1,0 +1,5 @@
+* 20,21,22,23,00 * * * /opt/check_band.sh 80
+* 00,01,02,03,04,05,06,07 * * * /opt/check_band.sh 80
+59 07 * * * sleep 10 && systemctl stop websdr@80.service
+* 08,0910,11,12,13,14,15,16,17,18,19 * * * /opt/check_band.sh 40
+59 19 * * * sleep 10 && systemctl stop websdr@40.service

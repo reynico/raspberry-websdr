@@ -1,0 +1,11 @@
+[Unit]
+Description=RTL TCP server on %I frequency
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/rtl_tcp -s 1024000 -g 10 -d%I -p999%I
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
