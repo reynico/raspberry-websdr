@@ -1,4 +1,5 @@
 # WebSDR node based on a Raspberry PI
+This WebSDR setup covers a dual band receiver (80/40 meters bands) time-based switched. It uses a relay to switch between antennas who is managed by one GPiO pin on the Raspberry PI (using a driver transistor). 
 
 ### Requirements
 - Raspberry PI 3
@@ -20,14 +21,13 @@ sudo cp etc/rc.local /etc/rc.local
 ```
 - Check and match GPIO ports for relay control to switch antennas and a button to soft reset the Raspberry pi.
 
-
 ### Software reset
 - There is a Python script that handles Raspberry PI reboots from a hardware switch without killing power.
 - Check the /etc/rc.local file and match the desired GPIO port for this task.
 - Copy lib/systemd/system/reset.service to /lib/systemd/system/reset.service
 ```
 sudo cp opt/reset.py /opt/reset.py
-sudo cp lib/systemd/system/reset.service to /lib/systemd/system/reset.service
+sudo cp etc/systemd/system/reset.service to /etc/systemd/system/reset.service
 chmod 644 /lib/systemd/system/reset.service
 systemctl enable reset.service
 systemctl start reset.service
@@ -37,6 +37,15 @@ systemctl start reset.service
 - Ask [Pieter](http://websdr.org/) to get a copy of WebSDR.
 - Copy the websdr-rpi binary and files to your home directory (/home/pi/)
 - Edit websdr-80m.cfg and websdr-40m.cfg to fulfill your configuration
+- Create Systemd units to manage websdr and rtl_tcp
+```
+sudo cp etc/systemd/system/websdr@.service /etc/systemd/system/websdr@.service
+sudo cp etc/systemd/system/rtl_tcp@.service /etc/systemd/system/rtl_tcp@.service
+```
+- Enable just the rtl_tcp one. Websdr is managed by crontab
+```
+sudo systemctl enable rtl_tcp@0.service
+```
 
 ### Cron
 - I built a crontab configuration to switch between 40m and 80m bands time-based. Just import the crontab lines into your crontab.
