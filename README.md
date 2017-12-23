@@ -36,6 +36,8 @@ chmod 644 /lib/systemd/system/reset.service
 systemctl enable reset.service
 systemctl start reset.service
 ```
+This is the software reset schematic. It has a 5v pull-up signal between a 10k resistor.
+![Soft reset](https://github.com/reynico/raspberry-websdr/raw/master/gpio_soft_reset.png)
 
 ### Antenna controller
 This WebSDR setup uses one RTL-SDR dongle for two bands (40/80 meters), crontab takes control of which band is working. As wave length isn't the same on both two bands, I'm using a GPiO port to switch between them using a DPDT relay. GPIO3 is controlled by the check_band.sh cron script.
