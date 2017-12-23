@@ -37,6 +37,10 @@ systemctl enable reset.service
 systemctl start reset.service
 ```
 
+### Antenna controller
+This WebSDR setup uses one RTL-SDR dongle for two bands (40/80 meters), crontab takes control of which band is working. As wave length isn't the same on both two bands, I'm using a GPiO port to switch between them using a DPDT relay. GPIO3 is controlled by the check_band.sh cron script.
+![Antenna controller schematic](https://github.com/reynico/raspberry-websdr/raw/master/gpio_antenna_control.png)
+
 ### WebSDR
 - Ask [Pieter](http://websdr.org/) to get a copy of WebSDR.
 - Copy the websdr-rpi binary and files to your home directory (/home/pi/)
