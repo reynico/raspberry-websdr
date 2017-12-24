@@ -3,7 +3,7 @@
 
 This WebSDR setup covers a dual band receiver (80/40 meters bands) time-based switched. It uses a relay to switch between antennas who is managed by one GPiO pin on the Raspberry PI (using a driver transistor). 
 
-Very special thanks to Mark G4FPH and Jarek SQ9NFI for the helpful hand on configuring the progfreq setting.
+Very special thanks to Pieter PA3FWM, Mark G4FPH and Jarek SQ9NFI for the helpful hand on configuring the progfreq setting.
 
 ### Requirements
 - Raspberry PI 3
@@ -59,3 +59,11 @@ sudo systemctl enable rtl_tcp@0.service
 
 ### Cron
 - I built a crontab configuration to switch between 40m and 80m bands time-based. Just import the crontab lines into your crontab.
+
+### Manual control
+You can always control band changes manual way. Disable cron lines to avoid automatic setup changes. Then you can use
+```
+sudo systemctl stop websdr@40.service
+sudo systemctl start websdr@40.service
+```
+Where 40 is the band you want to receive. You can use and setup almost any band you want, as long as you had setup your websdr-{{band}}m.cfg
