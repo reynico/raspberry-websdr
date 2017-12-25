@@ -1,12 +1,12 @@
 # Nodo WEBSdr utilizando un Raspberry PI 3
+Leer en [Inglés](README.md), [Español](README.es.md)
+Read in [English](README.md), [Español](README.es.md)
+
 ![Receptor SDR funcionando en la banda de 40 metros](https://github.com/reynico/raspberry-websdr/raw/master/sdr-40m.jpg)
 
 Esta guía cubre la configuración de un receptor de doble banda (80/40 metros) basada en forma horaria. Usa un relay para intercambiar entre antenas, controlado por un puerto GPiO del Raspberry PI (utilizando un transistor como driver).
 
 Muchas gracias a Pieter PA3FWM, Mark GP4FPH y Jarek SQ9NFI por la gran mano configurando el parámetro progfreq.req setting.
-
-Leer en [Inglés](README.md), [Español](README.es.md)
-Read in [English](README.md), [Spanish](README.es.md)
 
 ### Requerimientos
 - Raspberry PI 3
