@@ -5,6 +5,9 @@ This WebSDR setup covers a dual band receiver (80/40 meters bands) time-based sw
 
 Very special thanks to Pieter PA3FWM, Mark G4FPH and Jarek SQ9NFI for the helpful hand on configuring the progfreq setting.
 
+Leer en [Inglés](README.md), [Español](README.es.md)
+Read in [English](README.md), [Spanish](README.es.md)
+
 ### Requirements
 - Raspberry PI 3
 - Raspbian 9 installed and working
