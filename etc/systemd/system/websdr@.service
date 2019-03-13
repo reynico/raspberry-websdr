@@ -6,7 +6,7 @@ Requires=rtl_tcp@.service
 [Service]
 Type=simple
 WorkingDirectory=/home/pi/dist11/
-ExecStartPre=/bin/sleep 5
+ExecStartPost=/bin/bash -c 'sudo systemctl --no-block restart rtl_tcp@0.service'
 ExecStart=/home/pi/dist11/websdr-rpi /home/pi/dist11/websdr-%Im.cfg
 Restart=on-abort
 
