@@ -70,3 +70,12 @@ sudo systemctl stop websdr@40.service
 sudo systemctl start websdr@40.service
 ```
 Where 40 is the band you want to receive. You can use and setup almost any band you want, as long as you had setup your websdr-{{band}}m.cfg
+
+### How to fix the LibSSL issue
+I've noticed several websdr nodes that fails to start `websdr-rpi` using Raspbian. That's due a missing library called `libcrypto`. 
+```
+pi@raspberrypi:~/dist11 $ ./websdr-rpi websdr-40m.cfg
+./websdr-rpi: error while loading shared libraries: libcrypto.so.1.0.0: cannot open shared object file: No such file or directory
+```
+Fix is really easy:
+`sudo dpkg -i libssl1.0.0_1.0.1t-1+deb8u11_armhf.deb`

@@ -70,3 +70,12 @@ sudo systemctl stop websdr@40.service
 sudo systemctl start websdr@40.service
 ```
 Donde 40 es la banda que quieres recibir. Puedes usar y configurar prácticamente cualquier banda que quieras, siempre y cuando hayas configurado tu archivo websdr-{{banda}}m.cfg
+
+### Como arreglar el error de LibSSL
+Con el tiempo me di cuenta que algunos nodos de websdr fallaban al iniciar `websdr-rpi` usando Raspbian. Eso se debe a una libreria faltante llamada `libcrypto`.
+```
+pi@raspberrypi:~/dist11 $ ./websdr-rpi websdr-40m.cfg
+./websdr-rpi: error while loading shared libraries: libcrypto.so.1.0.0: cannot open shared object file: No such file or directory
+```
+Se soluciona facilmente:
+`sudo dpkg -i libssl1.0.0_1.0.1t-1+deb8u11_armhf.deb`
