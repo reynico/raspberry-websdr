@@ -2,7 +2,17 @@
 Leer en [Inglés](README.md), [Español](README.es.md).
 Read in [English](README.md), [Spanish](README.es.md).
 
-![SDR receiver working on 40m band](https://github.com/reynico/raspberry-websdr/raw/master/sdr-40m.jpg)
+- [WebSDR node based on a Raspberry PI](#websdr-node-based-on-a-raspberry-pi)
+    - [Requirements](#requirements)
+    - [Required setup and software](#required-setup-and-software)
+    - [GPIO Setup](#gpio-setup)
+    - [Software reset](#software-reset)
+    - [Antenna controller](#antenna-controller)
+    - [WebSDR](#websdr)
+    - [Cron](#cron)
+    - [Manual control](#manual-control)
+    - [How to fix the LibSSL issue](#how-to-fix-the-libssl-issue)
+    - [RTL SDR direct sampling (500khz - 28.8Mhz without upconverter!)](#rtl-sdr-direct-sampling-500khz---288mhz-without-upconverter)
 
 This WebSDR setup covers a dual band receiver (80/40 meters bands) time-based switched. It uses a relay to switch between antennas who is managed by one GPiO pin on the Raspberry PI (using a driver transistor). 
 
@@ -79,3 +89,19 @@ pi@raspberrypi:~/dist11 $ ./websdr-rpi websdr-40m.cfg
 ```
 Fix is really easy:
 `sudo dpkg -i libssl1.0.0_1.0.1t-1+deb8u11_armhf.deb`
+
+### RTL SDR direct sampling (500khz - 28.8Mhz without upconverter!)
+If your SDR dongle supports direct sampling (such as RTL-SDR.com V3 receiver), there's a way to receive 500khz-28.8mhz without an external upconverter hardware, easing the node build. Install cmake first!
+1. Unzip [rtl-sdr-driver-patched.zip](rtl-sdr-driver-patched.zip) and prepare the environment to build
+   1. `unzip rtl-sdr-driver-patched.zip`
+   2. `cd pkg-rtl-sdr/build`
+   3. `rm *`
+2. Build it
+   1. `cmake ../ -DINSTALL_UDEV_RULES=ON`
+   2. `make`
+   3. `sudo make install`
+   4. `sudo ldconfig`
+
+Once finished, configure `rtl_tcp` to use direct sampling mode with the `-D 2` switch as follows:
+* `/usr/bin/rtl_tcp -s1024000 -g10 -d0 -p9990 -D2`
+Don't forget to remove the `progfreq` line from the websdr configuration file(s).

@@ -2,7 +2,17 @@
 Leer en [Inglés](README.md), [Español](README.es.md)
 Read in [English](README.md), [Español](README.es.md)
 
-![Receptor SDR funcionando en la banda de 40 metros](https://github.com/reynico/raspberry-websdr/raw/master/sdr-40m.jpg)
+- [Nodo WEBSdr utilizando un Raspberry PI 3](#nodo-websdr-utilizando-un-raspberry-pi-3)
+    - [Requerimientos](#requerimientos)
+    - [Configuración y software requerido](#configuraci%c3%b3n-y-software-requerido)
+    - [Configuración de los pines GPIO](#configuraci%c3%b3n-de-los-pines-gpio)
+    - [Reinicio por software](#reinicio-por-software)
+    - [Controlador de antena](#controlador-de-antena)
+    - [WebSDR](#websdr)
+    - [Cron](#cron)
+    - [Control manual](#control-manual)
+    - [Como arreglar el error de LibSSL](#como-arreglar-el-error-de-libssl)
+    - [Direct sampling en RTL SDR (500khz - 28.8mhz sin upconverter!)](#direct-sampling-en-rtl-sdr-500khz---288mhz-sin-upconverter)
 
 Esta guía cubre la configuración de un receptor de doble banda (80/40 metros) basada en forma horaria. Usa un relay para intercambiar entre antenas, controlado por un puerto GPiO del Raspberry PI (utilizando un transistor como driver).
 
@@ -79,3 +89,20 @@ pi@raspberrypi:~/dist11 $ ./websdr-rpi websdr-40m.cfg
 ```
 Se soluciona facilmente:
 `sudo dpkg -i libssl1.0.0_1.0.1t-1+deb8u11_armhf.deb`
+
+### Direct sampling en RTL SDR (500khz - 28.8mhz sin upconverter!)
+Si tu dongle SDR soporta direct sampling (como el RTL-SDR.com v3), hay una manera de recibir las frecuencias entre 500khz y 28.8mhz sin necesidad de un upconverter externo, facilitando la construcción del nodo. Instalá cmake primero!
+
+1. Descomprimir [rtl-sdr-driver-patched.zip](rtl-sdr-driver-patched.zip) y preparar el ambiente de build
+   1. `unzip rtl-sdr-driver-patched.zip`
+   2. `cd pkg-rtl-sdr/build`
+   3. `rm *`
+2. Compilar
+   1. `cmake ../ -DINSTALL_UDEV_RULES=ON`
+   2. `make`
+   3. `sudo make install`
+   4. `sudo ldconfig`
+
+Una vez terminado, configurar `rtl_tcp` para que use direct sampling agregando el flag `-D 2` de la siguiente manera:
+* `/usr/bin/rtl_tcp -s1024000 -g10 -d0 -p9990 -D2`
+No olvides eliminar o comentar la linea `progfreq` de el(los) archivo(s) de configuración de websdr.
