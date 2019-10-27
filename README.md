@@ -2,6 +2,9 @@
 Leer en [Inglés](README.md), [Español](README.es.md).
 Read in [English](README.md), [Spanish](README.es.md).
 
+![SDR receiver working on 40m band](https://github.com/reynico/raspberry-websdr/raw/master/sdr-40m.jpg)
+
+
 - [WebSDR node based on a Raspberry PI](#websdr-node-based-on-a-raspberry-pi)
     - [Requirements](#requirements)
     - [Required setup and software](#required-setup-and-software)
