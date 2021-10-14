@@ -15,6 +15,7 @@ Read in [English](README.md), [Spanish](README.es.md).
     - [Cron](#cron)
     - [Manual control](#manual-control)
     - [How to fix the LibSSL issue](#how-to-fix-the-libssl-issue)
+    - [Blacklist RTL modules](#blacklist-rtl-modules)
     - [RTL SDR direct sampling (500khz - 28.8Mhz without upconverter!)](#rtl-sdr-direct-sampling-500khz---288mhz-without-upconverter)
 
 This WebSDR setup covers a dual band receiver (80/40 meters bands) time-based switched. It uses a relay to switch between antennas who is managed by one GPiO pin on the Raspberry PI (using a driver transistor). 
@@ -92,6 +93,13 @@ pi@raspberrypi:~/dist11 $ ./websdr-rpi websdr-40m.cfg
 ```
 Fix is really easy:
 `sudo dpkg -i libssl1.0.0_1.0.1t-1+deb8u11_armhf.deb`
+
+### Blacklist RTL modules
+You'll need to blacklist some modules in order to get rtl_tcp working. Edit or create the file `/etc/modprobe.d/blacklist` with the following content:
+```
+blacklist RTL28xxU
+blacklist RTL2832U
+```
 
 ### RTL SDR direct sampling (500khz - 28.8Mhz without upconverter!)
 If your SDR dongle supports direct sampling (such as RTL-SDR.com V3 receiver), there's a way to receive 500khz-28.8mhz without an external upconverter hardware, easing the node build. Install cmake first!

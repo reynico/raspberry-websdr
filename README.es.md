@@ -15,6 +15,7 @@ Read in [English](README.md), [Español](README.es.md)
     - [Cron](#cron)
     - [Control manual](#control-manual)
     - [Como arreglar el error de LibSSL](#como-arreglar-el-error-de-libssl)
+    - [Blacklist de los modulos RTL](#blacklist-de-los-modulos-rtl)
     - [Direct sampling en RTL SDR (500khz - 28.8mhz sin upconverter!)](#direct-sampling-en-rtl-sdr-500khz---288mhz-sin-upconverter)
 
 Esta guía cubre la configuración de un receptor de doble banda (80/40 metros) basada en forma horaria. Usa un relay para intercambiar entre antenas, controlado por un puerto GPiO del Raspberry PI (utilizando un transistor como driver).
@@ -92,6 +93,13 @@ pi@raspberrypi:~/dist11 $ ./websdr-rpi websdr-40m.cfg
 ```
 Se soluciona facilmente:
 `sudo dpkg -i libssl1.0.0_1.0.1t-1+deb8u11_armhf.deb`
+
+### Blacklist de los modulos RTL
+Tendrás que hacer blacklist (bloquear) algunos modulos para conseguir que rtl_tcp funcione. Edita o crea el archivo `/etc/modprobe.d/blacklist` con el siguiente contenido:
+```
+blacklist RTL28xxU
+blacklist RTL2832U
+```
 
 ### Direct sampling en RTL SDR (500khz - 28.8mhz sin upconverter!)
 Si tu dongle SDR soporta direct sampling (como el RTL-SDR.com v3), hay una manera de recibir las frecuencias entre 500khz y 28.8mhz sin necesidad de un upconverter externo, facilitando la construcción del nodo. Instalá cmake primero!
