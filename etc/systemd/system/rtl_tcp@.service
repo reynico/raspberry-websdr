@@ -4,8 +4,10 @@ After=multi-user.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/rtl_tcp -s 1024000 -g 10 -d%I -p999%I
-Restart=on-abort
+WorkingDirectory=/home/pi/raspberry-websdr/pkg-rtl-sdr/build/src
+ExecStart=/home/pi/raspberry-websdr/pkg-rtl-sdr/build/src/rtl_tcp -D2 -s 1024000 -g 10 -d%I -p999%I
+ExecStop=/bin/kill -9 $MAINPID
+Restart=always
 
 [Install]
 WantedBy=multi-user.target

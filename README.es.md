@@ -101,7 +101,7 @@ Si tu dongle SDR soporta direct sampling (como el RTL-SDR.com v3), hay una maner
    2. `cd pkg-rtl-sdr/build`
    3. `rm *`
 2. Compilar
-   1. `cmake ../ -DINSTALL_UDEV_RULES=ON`
+   1. `cmake ../ -DINSTALL_UDEV_RULES=ON -DDETACH_KERNEL_DRIVER=ON`
    2. `make`
    3. `sudo make install`
    4. `sudo ldconfig`

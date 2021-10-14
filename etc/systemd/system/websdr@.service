@@ -1,14 +1,15 @@
-[Unit]
 Description=WebSDR server
-After=multi-user.target
-Requires=rtl_tcp@.service
+After=network-online.target
 
 [Service]
 Type=simple
 WorkingDirectory=/home/pi/dist11/
-ExecStartPost=/bin/bash -c 'sudo systemctl --no-block restart rtl_tcp@0.service'
+ExecStartPre=/bin/sleep 10
+ExecStartPost=/bin/bash -c 'sleep 5 && sudo systemctl --no-block restart rtl_tcp@0.service'
 ExecStart=/home/pi/dist11/websdr-rpi /home/pi/dist11/websdr-%Im.cfg
-Restart=on-abort
+ExecStop=/bin/kill -9 $MAINPID
+Restart=always
+RestartSec=4
 
 [Install]
 WantedBy=multi-user.target
