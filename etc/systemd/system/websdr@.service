@@ -1,4 +1,4 @@
-Description=WebSDR server
+Description=WebSDR server on %Im band
 After=network-online.target
 
 [Service]
