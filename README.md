@@ -123,10 +123,9 @@ Fix is really easy:
 `sudo dpkg -i libssl1.0.0_1.0.1t-1+deb8u11_armhf.deb`
 
 ## Blacklist RTL modules
-You'll need to blacklist some modules in order to get rtl_tcp working. Edit or create the file `/etc/modprobe.d/blacklist` with the following content:
+You'll need to blacklist some modules in order to get rtl_tcp working. Edit or create the file `/etc/modprobe.d/blacklist.conf` with the following content:
 ```
-blacklist RTL28xxU
-blacklist RTL2832U
+blacklist dvb_usb_rtl28xxu
 ```
 
 ## RTL SDR direct sampling (500khz - 28.8Mhz without upconverter!)

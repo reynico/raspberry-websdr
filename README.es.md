@@ -1,11 +1,11 @@
-# Nodo WEBSdr utilizando un Raspberry PI 3
+# Nodo WebSDR utilizando un Raspberry PI 3
 Leer en [Inglés](README.md), [Español](README.es.md)
 Read in [English](README.md), [Español](README.es.md)
 
 ![Receptor SDR funcionando en la banda de 40 metros](https://github.com/reynico/raspberry-websdr/raw/master/sdr-40m.jpg)
 
 
-- [Nodo WEBSdr utilizando un Raspberry PI 3](#nodo-websdr-utilizando-un-raspberry-pi-3)
+- [Nodo WebSDR utilizando un Raspberry PI 3](#nodo-websdr-utilizando-un-raspberry-pi-3)
   - [Requerimientos de hardware](#requerimientos-de-hardware)
   - [Configuración y software requerido](#configuración-y-software-requerido)
   - [Instalar WebSDR](#instalar-websdr)
@@ -126,10 +126,9 @@ Se soluciona facilmente:
 `sudo dpkg -i libssl1.0.0_1.0.1t-1+deb8u11_armhf.deb`
 
 ## Blacklist de los modulos RTL
-Tendrás que hacer blacklist (bloquear) algunos modulos para conseguir que rtl_tcp funcione. Edita o crea el archivo `/etc/modprobe.d/blacklist` con el siguiente contenido:
+Tendrás que hacer blacklist (bloquear) algunos modulos para conseguir que rtl_tcp funcione. Edita o crea el archivo `/etc/modprobe.d/blacklist.conf` con el siguiente contenido:
 ```
-blacklist RTL28xxU
-blacklist RTL2832U
+blacklist dvb_usb_rtl28xxu
 ```
 
 ## Direct sampling en RTL SDR (500khz - 28.8mhz sin upconverter!)
