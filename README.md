@@ -30,9 +30,9 @@ Very special thanks to Pieter PA3FWM, Mark G4FPH and Jarek SQ9NFI for the helpfu
 
 ### Required setup and software
 ```
-sudo apt-get update && sudo apt-get upgrade
-sudo apt-get install g++ make libsigc++-1.2-dev libgsm1-dev libpopt-dev tcl8.5-dev libgcrypt-dev libspeex-dev libasound2-dev alsa-utils libqt4-dev
-sudo apt-get install libsigc++ cmake groff rtl-sdr
+sudo apt update && sudo apt upgrade
+sudo apt install -yq g++ make libsigc++-1.2-dev libgsm1-dev libpopt-dev tcl8.5-dev libgcrypt-dev libspeex-dev libasound2-dev alsa-utils libqt4-dev
+sudo apt install -yq libsigc++ cmake groff rtl-sdr libpng12-0 libusb-1.0-0-dev
 ```
 
 ### GPIO Setup

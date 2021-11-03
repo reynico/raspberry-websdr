@@ -7,8 +7,8 @@ Read in [English](README.md), [Español](README.es.md)
 
 - [Nodo WEBSdr utilizando un Raspberry PI 3](#nodo-websdr-utilizando-un-raspberry-pi-3)
     - [Requerimientos](#requerimientos)
-    - [Configuración y software requerido](#configuraci%c3%b3n-y-software-requerido)
-    - [Configuración de los pines GPIO](#configuraci%c3%b3n-de-los-pines-gpio)
+    - [Configuración y software requerido](#configuración-y-software-requerido)
+    - [Configuración de los pines GPIO](#configuración-de-los-pines-gpio)
     - [Reinicio por software](#reinicio-por-software)
     - [Controlador de antena](#controlador-de-antena)
     - [WebSDR](#websdr)
@@ -30,9 +30,9 @@ Muchas gracias a Pieter PA3FWM, Mark GP4FPH y Jarek SQ9NFI por la gran mano conf
 
 ### Configuración y software requerido
 ```
-sudo apt-get update && sudo apt-get upgrade
-sudo apt-get install g++ make libsigc++-1.2-dev libgsm1-dev libpopt-dev tcl8.5-dev libgcrypt-dev libspeex-dev libasound2-dev alsa-utils libqt4-dev
-sudo apt-get install libsigc++ cmake groff rtl-sdr
+sudo apt update && sudo apt upgrade
+sudo apt install -yq g++ make libsigc++-1.2-dev libgsm1-dev libpopt-dev tcl8.5-dev libgcrypt-dev libspeex-dev libasound2-dev alsa-utils libqt4-dev
+sudo apt install -yq libsigc++ cmake groff rtl-sdr libpng12-0 libusb-1.0-0-dev
 ```
 
 ### Configuración de los pines GPIO
