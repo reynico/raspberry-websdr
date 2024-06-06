@@ -8,6 +8,7 @@ Read in [English](README.md), [Español](README.es.md)
 - [Nodo WebSDR utilizando un Raspberry PI](#nodo-websdr-utilizando-un-raspberry-pi)
   - [Requerimientos de hardware](#requerimientos-de-hardware)
   - [Configuración y software requerido](#configuración-y-software-requerido)
+  - [Clonar este repositorio](#clonar-este-repositorio)
   - [Librerias faltantes](#librerias-faltantes)
     - [libpng12](#libpng12)
     - [libssl-1.0.0](#libssl-100)
@@ -22,6 +23,7 @@ Read in [English](README.md), [Español](README.es.md)
     - [Configuración de los pines GPIO](#configuración-de-los-pines-gpio)
   - [Reinicio por software](#reinicio-por-software)
   - [Blacklist de los modulos RTL](#blacklist-de-los-modulos-rtl)
+  - [Desgaste de la tarjeta SD](#desgaste-de-la-tarjeta-sd)
 
 Esta guía cubre la configuración de un receptor de doble banda (80/40 metros) basada en forma horaria. Usa un relay para intercambiar entre antenas, controlado por un puerto GPiO del Raspberry PI (utilizando un transistor como driver).
 
@@ -54,7 +56,17 @@ sudo apt install -y \
   groff \
   rtl-sdr \
   libusb-1.0-0-dev \
-  unzip
+  unzip \
+  git \
+  rsync
+```
+
+## Clonar este repositorio
+
+```
+cd /home/pi/
+git clone https://github.com/reynico/raspberry-websdr.git
+cd raspberry-websdr/
 ```
 
 ## Librerias faltantes
@@ -69,6 +81,7 @@ cd libpng-1.2.59/
 ./configure
 make
 sudo make install
+cd ..
 ```
 
 ### libssl-1.0.0
@@ -90,6 +103,7 @@ ldd $HOME/libssl/openssl/bin/openssl
 sudo cp $HOME/libssl/openssl/lib/libcrypto.so /usr/local/lib
 sudo chmod 0755 /usr/local/lib/libcrypto.so
 sudo ldconfig
+cd ..
 ```
 
 ## Direct sampling en RTL SDR (500khz - 28.8mhz sin upconverter!)
@@ -105,8 +119,9 @@ cmake ../ -DINSTALL_UDEV_RULES=ON -DDETACH_KERNEL_DRIVER=ON
 make
 sudo make install
 sudo ldconfig
-cd ..
+cd ../../
 cp -r pkg-rtl-sdr/ /home/pi/
+cd ..
 ```
 
 No olvides eliminar o comentar la linea `progfreq` de el(los) archivo(s) de configuración de websdr.
@@ -119,6 +134,7 @@ sudo cp etc/systemd/system/rtl_tcp_direct_sampling.service /etc/systemd/system/r
 
 ## Instalar WebSDR
 
+- Este es un buen momento para reiniciar la Raspberry PI, ejecutar `sudo reboot`.
 - Enviale un email a [Pieter](http://websdr.org/) para obtener una copia de WebSDR.
 - Copia el binario websdr-rpi y los archivos de configuración a tu directorio personal (/home/pi/)
 - Edita websdr-80m.cfg y websdr-40m.cfg para ajustarlo a tu configuración
@@ -208,9 +224,9 @@ sudo cp etc/rc.local /etc/rc.local
 ```
 sudo cp opt/reset.py /opt/reset.py
 sudo cp etc/systemd/system/reset.service /etc/systemd/system/reset.service
-chmod 644 /etc/systemd/system/reset.service
-systemctl enable reset.service
-systemctl start reset.service
+sudo chmod 644 /etc/systemd/system/reset.service
+sudo systemctl enable reset.service
+sudo systemctl start reset.service
 ```
 
 Éste es el circuito esquemático del reinicio por software. Tiene una señal de pull-up a 5v a través de una resistencia de 10k.
@@ -222,4 +238,30 @@ Tendrás que hacer blacklist (bloquear) algunos modulos para conseguir que rtl_t
 
 ```
 blacklist dvb_usb_rtl28xxu
+```
+
+
+## Desgaste de la tarjeta SD
+
+Para reducir el desgaste de la tarjeta SD por las escrituras a disco de los logs, recomiendo instalar [log2ram](https://github.com/azlux/log2ram), una herramienta que crea un punto de montaje en ram para `/var/log`.
+
+```
+echo "deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ bookworm main" | sudo tee /etc/apt/sources.list.d/azlux.list
+sudo wget -O /usr/share/keyrings/azlux-archive-keyring.gpg  https://azlux.fr/repo.gpg
+sudo apt update
+sudo apt install log2ram
+
+sudo systemctl enable log2ram
+```
+
+Probablemente quieras aumentar el tamaño de la partición de logs a 200M, edita el archivo `/etc/log2ram.conf` y configura `SIZE=200M`.
+
+Si bien Websdr tiene una opción para prevenir que los logs se escriban a la tarjeta (`logfileinterval 0`), hay dos archivos de log que se escriben de todas formas: `log-cpuload.txt` y `userslog.txt`. Crea un directorio para logs dentro de `/var/log` y enlaza de forma simbólica para los dos archivos.
+
+```
+sudo rm /home/pi/dist11/userslog.txt
+sudo rm /home/pi/dist11/log-cpuload.txt
+sudo mkdir -p /var/log/websdr
+ln -s /var/log/websdr/userslog.txt /home/pi/dist11/userslog.txt
+ln -s /var/log/websdr/log-cpuload.txt /home/pi/dist11/log-cpuload.txt
 ```

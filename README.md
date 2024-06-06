@@ -8,6 +8,7 @@ Read in [English](README.md), [Spanish](README.es.md).
 - [WebSDR node based on a Raspberry PI](#websdr-node-based-on-a-raspberry-pi)
   - [General hardware requirements](#general-hardware-requirements)
   - [Required setup and software](#required-setup-and-software)
+  - [Clone this repository](#clone-this-repository)
   - [Missing libraries](#missing-libraries)
     - [libpng12](#libpng12)
     - [libssl-1.0.0](#libssl-100)
@@ -22,6 +23,7 @@ Read in [English](README.md), [Spanish](README.es.md).
     - [GPIO Setup](#gpio-setup)
   - [Software reset](#software-reset)
   - [Blacklist RTL modules](#blacklist-rtl-modules)
+  - [SD Card wear](#sd-card-wear)
 
 This WebSDR setup covers a dual band receiver (80/40 meters bands) time-based switched. It uses a relay to switch between antennas who is managed by one GPiO pin on the Raspberry PI (using a driver transistor).
 
@@ -54,7 +56,17 @@ sudo apt install -y \
   groff \
   rtl-sdr \
   libusb-1.0-0-dev \
-  unzip
+  unzip \
+  git \
+  rsync
+```
+
+## Clone this repository
+
+```
+cd /home/pi/
+git clone https://github.com/reynico/raspberry-websdr.git
+cd raspberry-websdr/
 ```
 
 ## Missing libraries
@@ -69,6 +81,7 @@ cd libpng-1.2.59/
 ./configure
 make
 sudo make install
+cd ..
 ```
 
 ### libssl-1.0.0
@@ -90,6 +103,7 @@ ldd $HOME/libssl/openssl/bin/openssl
 sudo cp $HOME/libssl/openssl/lib/libcrypto.so /usr/local/lib
 sudo chmod 0755 /usr/local/lib/libcrypto.so
 sudo ldconfig
+cd ..
 ```
 
 ## RTL SDR direct sampling (500khz - 28.8Mhz without upconverter!)
@@ -105,8 +119,9 @@ cmake ../ -DINSTALL_UDEV_RULES=ON -DDETACH_KERNEL_DRIVER=ON
 make
 sudo make install
 sudo ldconfig
-cd ..
+cd ../../
 cp -r pkg-rtl-sdr/ /home/pi/
+cd ..
 ```
 
 Don't forget to remove the `progfreq` line from the websdr configuration file(s).
@@ -119,6 +134,7 @@ sudo cp etc/systemd/system/rtl_tcp_direct_sampling.service /etc/systemd/system/r
 
 ## Install WebSDR
 
+- This is a good time to reboot your Raspberry PI, do a `sudo reboot`.
 - Ask [Pieter](http://websdr.org/) to get a copy of WebSDR.
 - Copy the websdr-rpi binary and files to your home directory (/home/pi/)
 - Edit websdr.cfg (for single band use), or websdr-80m.cfg and websdr-40m.cfg (for dual band use) to fulfill your configuration
@@ -202,14 +218,14 @@ sudo cp etc/rc.local /etc/rc.local
 
 - There is a Python script that handles Raspberry PI reboots from a hardware switch without killing power.
 - Check the /etc/rc.local file and match the desired GPIO port for this task.
-- Copy lib/systemd/system/reset.service to /lib/systemd/system/reset.service
+- Copy etc/systemd/system/reset.service to /etc/systemd/system/reset.service
 
 ```
 sudo cp opt/reset.py /opt/reset.py
 sudo cp etc/systemd/system/reset.service /etc/systemd/system/reset.service
-chmod 644 /etc/systemd/system/reset.service
-systemctl enable reset.service
-systemctl start reset.service
+sudo chmod 644 /etc/systemd/system/reset.service
+sudo systemctl enable reset.service
+sudo systemctl start reset.service
 ```
 
 This is the software reset schematic. It has a 5v pull-up signal between a 10k resistor.
@@ -221,4 +237,30 @@ You'll need to blacklist some modules in order to get rtl_tcp working. Edit or c
 
 ```
 blacklist dvb_usb_rtl28xxu
+```
+
+
+## SD Card wear
+
+To reduce the SD Card wear due to writes from logs, I recommend you to install [log2ram](https://github.com/azlux/log2ram), a tool which creates a ramdisk mountpoint for `/var/log`.
+
+```
+echo "deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ bookworm main" | sudo tee /etc/apt/sources.list.d/azlux.list
+sudo wget -O /usr/share/keyrings/azlux-archive-keyring.gpg  https://azlux.fr/repo.gpg
+sudo apt update
+sudo apt install log2ram
+
+sudo systemctl enable log2ram
+```
+
+You may want to increase the ramdisk partition size up to 200M, edit the file `/etc/log2ram.conf` and set `SIZE=200M`.
+
+While Websdr has an option to prevent logs to be written to the card (`logfileinterval 0`), there are two log files that are written anyway: `log-cpuload.txt` and `userslog.txt`. Create a logs folder inside `/var/log` and link both files in a symbolic fashion.
+
+```
+sudo rm /home/pi/dist11/userslog.txt
+sudo rm /home/pi/dist11/log-cpuload.txt
+sudo mkdir -p /var/log/websdr
+ln -s /var/log/websdr/userslog.txt /home/pi/dist11/userslog.txt
+ln -s /var/log/websdr/log-cpuload.txt /home/pi/dist11/log-cpuload.txt
 ```
