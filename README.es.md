@@ -30,7 +30,7 @@ Muchas gracias a Pieter PA3FWM, Mark GP4FPH y Jarek SQ9NFI por la gran mano conf
 ## Requerimientos de hardware
 
 - Raspberry PI 3 o superior
-- Raspbian 11 (bullseye) instalado y funcionando
+- [Raspberry Pi OS (Legacy) instalado](https://downloads.raspberrypi.com/raspios_oldstable_lite_armhf/images/raspios_oldstable_lite_armhf-2024-03-12/2024-03-12-raspios-bullseye-armhf-lite.img.xz) y funcionando.
 - Acceso a internet configurado y funcionando
 - Receptor RTL-SDR USB
 
@@ -38,19 +38,18 @@ Muchas gracias a Pieter PA3FWM, Mark GP4FPH y Jarek SQ9NFI por la gran mano conf
 
 ```
 sudo apt update && sudo apt upgrade
-sudo apt install -yq
+sudo apt install -y \
   g++ \
   make \
-  libsigc++-1.2-dev \
+  libsigc++-2.0-dev \
   libgsm1-dev \
   libpopt-dev \
-  tcl8.5-dev \
+  tcl8.6-dev \
   libgcrypt-dev \
   libspeex-dev \
   libasound2-dev \
   alsa-utils \
-  libqt4-dev \
-  libsigc++ \
+  libsigc++-2.0-0v5 \
   cmake \
   groff \
   rtl-sdr \
@@ -99,13 +98,15 @@ Si tu dongle SDR soporta direct sampling (como el RTL-SDR.com v3), hay una maner
 
 ```
 unzip rtl-sdr-driver-patched.zip
-cd rtl-sdr-driver-patched/
+cd pkg-rtl-sdr/
 mkdir -p build/
 cd build/
 cmake ../ -DINSTALL_UDEV_RULES=ON -DDETACH_KERNEL_DRIVER=ON
 make
 sudo make install
 sudo ldconfig
+cd ..
+cp -r pkg-rtl-sdr/ /home/pi/
 ```
 
 No olvides eliminar o comentar la linea `progfreq` de el(los) archivo(s) de configuración de websdr.

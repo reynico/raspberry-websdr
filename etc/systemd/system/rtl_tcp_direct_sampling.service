@@ -4,8 +4,8 @@ After=multi-user.target
 
 [Service]
 Type=simple
-WorkingDirectory=/home/pi/raspberry-websdr/pkg-rtl-sdr/build/src
-ExecStart=/home/pi/raspberry-websdr/pkg-rtl-sdr/build/src/rtl_tcp -D2 -s 1024000 -g 10 -d%I -p999%I
+WorkingDirectory=/home/pi/pkg-rtl-sdr/build/src
+ExecStart=/home/pi/pkg-rtl-sdr/build/src/rtl_tcp -D2 -s 1024000 -g 10 -d%I -p999%I
 ExecStop=/bin/kill -9 $MAINPID
 Restart=always
 
