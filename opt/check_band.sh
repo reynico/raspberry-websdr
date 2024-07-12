@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 if [ $# -eq 0 ]; then
     echo "Usage: ./check_band.sh BAND. example: ./check_band.sh 40"
