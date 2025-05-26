@@ -38,7 +38,7 @@ Muchas gracias a Pieter PA3FWM, Mark GP4FPH y Jarek SQ9NFI por la gran mano conf
 
 ## Configuración y software requerido
 
-```
+```bash
 sudo apt update && sudo apt upgrade
 sudo apt install -y \
   g++ \
@@ -61,6 +61,24 @@ sudo apt install -y \
   rsync
 ```
 
+Si estás usando una Rapberry PI 4 o mas nueva (con arquitectura arm64), instalá la arquitectura `armhf`:
+
+```bash
+sudo dpkg --add-architecture armhf
+sudo apt install -y \
+  libsigc++-2.0-dev:armhf \
+  libgsm1-dev:armhf \
+  libpopt-dev:armhf \
+  tcl8.6-dev:armhf \
+  libgcrypt-dev:armhf \
+  libspeex-dev:armhf \
+  libasound2-dev:armhf \
+  libsigc++-2.0-0v5:armhf \
+  libusb-1.0-0-dev:armhf \
+  libc6:armhf \
+  zlib1g-dev:armhf
+```
+
 ## Clonar este repositorio
 
 ```
@@ -75,7 +93,31 @@ Con las últimas actualizaciones, algunas librerias requeridas por websdr fueron
 
 ### libpng12
 
+Si estás usando una Rapberry PI 4 o mas nueva (con arquitectura arm64), compilá `libpng` de esta manera:
+
+```bash
+sudo apt install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+
+tar xf libpng-1.2.59.tar.xz
+cd libpng-1.2.59/
+CC=arm-linux-gnueabihf-gcc \
+CXX=arm-linux-gnueabihf-g++ \
+./configure \
+  --host=arm-linux-gnueabihf \
+  --prefix=/usr/local \
+  --libdir=/usr/local/lib/arm-linux-gnueabihf
+
+make
+sudo make install
+sudo ldconfig
+sudo ln -s /usr/local/lib/arm-linux-gnueabihf/libpng12.so.0 /lib/arm-linux-gnueabihf/libpng12.so.0
+cd..
+
 ```
+
+Si estás usando una Raspberry anterior a una PI 4, usá este comando:
+
+```bash
 tar xf libpng-1.2.59.tar.xz
 cd libpng-1.2.59/
 ./configure
@@ -86,7 +128,30 @@ cd ..
 
 ### libssl-1.0.0
 
+Si estás usando una Rapberry PI 4 o mas nueva (con arquitectura arm64), compilá `libssl` de esta manera:
+
+```bash
+cd openssl-1.0.0k/
+
+CC=arm-linux-gnueabihf-gcc ./Configure linux-armv4 shared \
+  --prefix=/usr/local/arm32 \
+  --openssldir=/usr/local/arm32/ssl \
+  -Wl,--version-script=openssl.ld \
+  -Wl,-Bsymbolic-functions
+
+make
+sudo make install_sw
+
+sudo ln -s /usr/local/arm32/lib/libcrypto.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libcrypto.so.1.0.0
+sudo ln -s /usr/local/arm32/lib/libssl.so.1.0.0 /usr/lib/arm-linux-gnueabihf/libssl.so.1.0.0
+
+sudo ldconfig
 ```
+
+
+Si estás usando una Raspberry anterior a una PI 4, usá este comando:
+
+```bash
 tar xf openssl-1.0.0k.tar.gz
 cd openssl-1.0.0k/
 cat << EOF > openssl.ld
@@ -110,7 +175,7 @@ cd ..
 
 Si tu dongle SDR soporta direct sampling (como el RTL-SDR.com v3), hay una manera de recibir las frecuencias entre 500khz y 28.8mhz sin necesidad de un upconverter externo, facilitando la construcción del nodo.
 
-```
+```bash
 unzip rtl-sdr-driver-patched.zip
 cd pkg-rtl-sdr/
 mkdir -p build/
@@ -128,7 +193,7 @@ No olvides eliminar o comentar la linea `progfreq` de el(los) archivo(s) de conf
 
 Use the following systemd unit for direct sampling:
 
-```
+```bash
 sudo cp etc/systemd/system/rtl_tcp_direct_sampling.service /etc/systemd/system/rtl_tcp@.service
 ```
 
@@ -140,13 +205,13 @@ sudo cp etc/systemd/system/rtl_tcp_direct_sampling.service /etc/systemd/system/r
 - Edita websdr-80m.cfg y websdr-40m.cfg para ajustarlo a tu configuración
 - Crea dos Systemd units para controlar websdr y rtl_tcp
 
-```
+```bash
 sudo cp etc/systemd/system/websdr@.service /etc/systemd/system/websdr@.service
 ```
 
 Copia este archivo solo si NO estás usando el modo direct sampling de tu RTL SDR
 
-```
+```bash
 sudo cp etc/systemd/system/rtl_tcp@.service /etc/systemd/system/rtl_tcp@.service
 ```
 
@@ -156,20 +221,20 @@ El setup descripto en esta sección es el mas común: un receptor SDR de una sol
 
 - Crea las systemd units para controlar `websdr` y `rtl_tcp`:
 
-```
+```bash
 sudo cp etc/systemd/system/websdr.service /etc/systemd/system/websdr.service
 sudo cp etc/systemd/system/rtl_tcp@.service /etc/systemd/system/rtl_tcp@.service
 ```
 
 - Habilita la systemd unit `rtl_tcp`:
 
-```
+```bash
 sudo systemctl enable rtl_tcp@0.service
 ```
 
 - Habilita la systemd unit `websdr`:
 
-```
+```bash
 sudo systemctl enable websdr.service
 ```
 
@@ -186,7 +251,7 @@ Esta configuración de WebSDR utiliza un solo receptor RTL-SDR para dos bandas (
 
 - Hablita solo la systemd unit `rtl_tcp`. Websdr es controlado por `crontab`.
 
-```
+```bash
 sudo systemctl enable rtl_tcp@0.service
 ```
 
@@ -198,7 +263,7 @@ sudo systemctl enable rtl_tcp@0.service
 
 Siempre podrás controlar el cambio de bandas de forma manual. Deshabilita las lineas de cron para evitar cambios automáticos. Luego puedes usar:
 
-```
+```bash
 sudo systemctl stop websdr@40.service
 sudo systemctl start websdr@40.service
 ```
@@ -209,7 +274,7 @@ Donde 40 es la banda que quieres recibir. Puedes usar y configurar prácticament
 
 - Copia el archivo etc/rc.local a tu /etc/rc.local
 
-```
+```bash
 sudo cp etc/rc.local /etc/rc.local
 ```
 
@@ -221,7 +286,7 @@ sudo cp etc/rc.local /etc/rc.local
 - Revisa el archivo /etc/rc.local y sincroniza el pin GPiO designado para esta aplicación.
 - Copia el archivo etc/systemd/system/reset.service a /etc/systemd/system/reset.service
 
-```
+```bash
 sudo cp opt/reset.py /opt/reset.py
 sudo cp etc/systemd/system/reset.service /etc/systemd/system/reset.service
 sudo chmod 644 /etc/systemd/system/reset.service
@@ -236,7 +301,7 @@ sudo systemctl start reset.service
 
 Tendrás que hacer blacklist (bloquear) algunos modulos para conseguir que rtl_tcp funcione. Edita o crea el archivo `/etc/modprobe.d/blacklist.conf` con el siguiente contenido:
 
-```
+```bash
 blacklist dvb_usb_rtl28xxu
 ```
 
@@ -245,7 +310,7 @@ blacklist dvb_usb_rtl28xxu
 
 Para reducir el desgaste de la tarjeta SD por las escrituras a disco de los logs, recomiendo instalar [log2ram](https://github.com/azlux/log2ram), una herramienta que crea un punto de montaje en ram para `/var/log`.
 
-```
+```bash
 echo "deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ bookworm main" | sudo tee /etc/apt/sources.list.d/azlux.list
 sudo wget -O /usr/share/keyrings/azlux-archive-keyring.gpg  https://azlux.fr/repo.gpg
 sudo apt update
@@ -258,7 +323,7 @@ Probablemente quieras aumentar el tamaño de la partición de logs a 200M, edita
 
 Si bien Websdr tiene una opción para prevenir que los logs se escriban a la tarjeta (`logfileinterval 0`), hay dos archivos de log que se escriben de todas formas: `log-cpuload.txt` y `userslog.txt`. Crea un directorio para logs dentro de `/var/log` y enlaza de forma simbólica para los dos archivos.
 
-```
+```bash
 sudo rm /home/pi/dist11/userslog.txt
 sudo rm /home/pi/dist11/log-cpuload.txt
 sudo mkdir -p /var/log/websdr
