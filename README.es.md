@@ -7,6 +7,7 @@ Read in [English](README.md), [Español](README.es.md)
 
 - [Nodo WebSDR utilizando un Raspberry PI](#nodo-websdr-utilizando-un-raspberry-pi)
   - [Requerimientos de hardware](#requerimientos-de-hardware)
+  - [Estás usando una Raspberry PI 4 o mas nueva?](#estás-usando-una-raspberry-pi-4-o-mas-nueva)
   - [Configuración y software requerido](#configuración-y-software-requerido)
   - [Clonar este repositorio](#clonar-este-repositorio)
   - [Librerias faltantes](#librerias-faltantes)
@@ -35,6 +36,22 @@ Muchas gracias a Pieter PA3FWM, Mark GP4FPH y Jarek SQ9NFI por la gran mano conf
 - [Raspberry Pi OS (Legacy) instalado](https://downloads.raspberrypi.com/raspios_oldstable_lite_armhf/images/raspios_oldstable_lite_armhf-2024-03-12/2024-03-12-raspios-bullseye-armhf-lite.img.xz) y funcionando.
 - Acceso a internet configurado y funcionando
 - Receptor RTL-SDR USB
+
+## Estás usando una Raspberry PI 4 o mas nueva?
+
+A partir de la Raspberry PI 4, el hardware corre en una arquitectura diferente (pero similar) al hardware viejo. `websdr-rpi` no es completamente compatible con esta nueva arquitectura, mas que nada por dependencias desactualizadas y por lo tanto puede que te encuentres con algunos de estos errores:
+
+```
+websdr-rpi: cannot execute: required file not found
+```
+
+or
+
+```
+websdr-rpi: error while loading shared libraries: libfftw3f.so.3
+```
+
+Algunos de los pasos listados aquí abajo tienen instrucciones específicas para configurar una Raspberry PI 4 con hardware moderno y solucionar estos problemas.
 
 ## Configuración y software requerido
 
