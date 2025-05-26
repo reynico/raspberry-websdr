@@ -227,7 +227,7 @@ sudo cp etc/systemd/system/rtl_tcp_direct_sampling.service /etc/systemd/system/r
 sudo cp etc/systemd/system/websdr@.service /etc/systemd/system/websdr@.service
 ```
 
-Copy this systemd unit only if you're NOT using the RTL SDR direct sampling method
+Copy this systemd unit only if you're NOT using the RTL SDR direct sampling method. RTL-SDR.com V4 receivers don't need the [Direct Sampling](#rtl-sdr-direct-sampling-500khz---288mhz-without-upconverter) mod to work, it just works out of the box.
 
 ```bash
 sudo cp etc/systemd/system/rtl_tcp@.service /etc/systemd/system/rtl_tcp@.service
