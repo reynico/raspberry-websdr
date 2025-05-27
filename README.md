@@ -13,7 +13,7 @@ Read in [English](README.md), [Spanish](README.es.md).
   - [Missing libraries](#missing-libraries)
     - [libpng12](#libpng12)
     - [libssl-1.0.0](#libssl-100)
-  - [RTL SDR direct sampling (500khz - 28.8Mhz without upconverter!)](#rtl-sdr-direct-sampling-500khz---288mhz-without-upconverter)
+  - [RTL SDR direct sampling (500KHz - 28.8MHz without upconverter!)](#rtl-sdr-direct-sampling-500khz---288mhz-without-upconverter)
   - [Install WebSDR](#install-websdr)
   - [Single band WebSDR](#single-band-websdr)
   - [Time-controlled, dual band WebSDR](#time-controlled-dual-band-websdr)
@@ -189,9 +189,23 @@ sudo ldconfig
 cd ..
 ```
 
-## RTL SDR direct sampling (500khz - 28.8Mhz without upconverter!)
+## RTL SDR direct sampling (500KHz - 28.8MHz without upconverter!)
 
-If your SDR dongle supports direct sampling (such as RTL-SDR.com V3 receiver), there's a way to receive 500khz-28.8mhz without an external upconverter hardware, easing the node build.
+If you are running a RTL-SDR.com V4 receiver, a special version of the `rtl-sdr` driver is needed in order to receive 500KHz-28.8MHz
+
+```bash
+git clone https://github.com/rtlsdrblog/rtl-sdr-blog
+cd rtl-sdr-blog/
+mkdir build
+cd build
+cmake ../ -DINSTALL_UDEV_RULES=ON
+make
+sudo make install
+sudo cp ../rtl-sdr.rules /etc/udev/rules.d/
+sudo ldconfig
+```
+
+If you are running a different SDR device, but if it supports direct sampling (such as RTL-SDR.com V3 receiver), there's a way to receive 500khz-28.8mhz without an external upconverter hardware, easing the node build.
 
 ```bash
 unzip rtl-sdr-driver-patched.zip
