@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title>WebSDR sysop page</title>
+</head>
+
+<body>
+
+<b>The below commands only work when accessed from the machine on which the WebSDR server itself is running,
+or from the local network if so configured (see documentation).</b>
+
+<hr>
+
+To erase a line from the chatbox, copy the (initial part of the) offending line (incl. timestamp) here and submit:
+<form name="chatcensorform" action="~~chatcensor" method="get">
+<input type="text" name="line" size="40">
+<input type="submit" value="submit">
+</form>
+<form name="chatcensorform" action="~~chatcensor" method="get">
+<input type="hidden" name="disable" value="1">
+<input type="submit" value="Disable chatbox">
+</form>
+<form name="chatcensorform" action="~~chatcensor" method="get">
+<input type="hidden" name="disable" value="0">
+<input type="submit" value="Re-enable chatbox">
+</form>
+
+<hr>
+
+To display an important message on the waterfall, type it here and submit:
+<form name="waterfalltextform" action="~~waterfalltext" method="get">
+<input type="text" name="text" size="40">
+<input type="submit" value="submit">
+</form>
+
+<hr>
+
+<form name="configreload" action="~~configreload" method="get">
+To reload the configuration file <em>without</em> forcing all users browsers to reload the page:
+<input type="hidden" name="how" value="1">
+<input type="submit" value="submit">
+<br>New configuration filename (optional): <input type="text" name="cfg" value="">
+</form>
+<p>
+
+<hr>
+
+<form name="configreload" action="~~configreload" method="get">
+To reload the configuration file <em>with</em> forcing all users browsers to reload the page
+(e.g., when a frequency range has changed):
+<input type="hidden" name="how" value="2">
+<input type="submit" value="submit">
+<br>New configuration filename (optional): <input type="text" name="cfg" value="">
+</form>
+
+<hr>
+
+<form name="configreload" action="~~configreload" method="get">
+To stop the WebSDR server:
+<input type="hidden" name="how" value="3">
+<input type="submit" value="submit">
+</form>
+
+<hr>
+
+</body>

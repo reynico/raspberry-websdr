@@ -1,0 +1,4 @@
+WebSDR logbook - note that entries can be made by anyone so correctness is not guaranteed
+--------------------------------------------------------------------------------------------------
+date     UTC    freq   call           comments                        dxcc country        heard by
+--------------------------------------------------------------------------------------------------
