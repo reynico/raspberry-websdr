@@ -1,1 +1,11 @@
 .DS_Store
+libpng-1.2.59/
+openssl-1.0.0k/
+websdr
+websdr64
+websdr-rpi
+fftw-wisdom.dat
+log-cpuload.txt
+userslog.txt
+tmp.tmp
+tmp/
