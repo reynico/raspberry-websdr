@@ -10,9 +10,8 @@ document_username();
 
 
 <div id="dummyforie"></div>
-<a href="m.html">
-<div id="mobilewarning" class="warning" style="min-height:45px; text-align:center; vertical-align:middle;">
-It seems you are using a mobile device; click here to switch to the mobile version of this site.
+<a>
+<div id="mobilewarning">
 </div>
 </a>
 <div id="javawarning" class="warning">
@@ -26,20 +25,20 @@ Your browser does not seem to support HTML5 WebAudio; please try a recent versio
 
 <form name="viewform" action="#">
 <div class="ctl">
-  <b>View:</b>
+  <b>Vista:</b>
   <span id="viewformbuttons"></span>
 </div>
 <div class="ctl">
-  <b>Allow keyboard:</b>
+  <b>Usar teclado:</b>
   <input type="checkbox" name="allowkeys" value="">
   <div class="keylist">
-  <tt><b>j k &larr; &rarr;</b></tt>: freq down/up (+shift/ctrl/alt faster)
+  <tt><b>j k &larr; &rarr;</b></tt>: subir bajar frecuencia (+shift/ctrl/alt mas velocidad)
   <br>
   <tt><b>u l c a f</b></tt>: USB, LSB, CW, AM, FM
   <br>
-  <tt><b>z Z</b></tt>: center/zoom waterfall 
+  <tt><b>z Z</b></tt>: centrar/zoom cascada
   <br>
-  <tt><b>g</b></tt>: enter frequency
+  <tt><b>g</b></tt>: ingresar frecuencia
   </div>
 </div>
 </form>
@@ -76,7 +75,7 @@ Your browser does not seem to support HTML5 WebAudio; please try a recent versio
 <form name="freqform" action="#" onsubmit="setfreqif(this.frequency.value); return false;">
 
 <div class="ctl block">
-  <b>Frequency:</b>
+  <b>Frecuencia:</b>
   <span class="showblind">
   <input id="freqstepm3" type="button" value="---" onclick="freqstep(-3)">
   <input type="button" value="--" onclick="freqstep(-2)">
@@ -96,10 +95,10 @@ Your browser does not seem to support HTML5 WebAudio; please try a recent versio
   <script type="text/javascript"> document_bandbuttons(); </script>
   <div class="hideblind">
   <br>
-  <span style="font-size:65%">Or tune by clicking/dragging/scrollwheel on the frequency scale.</span>
+  <span style="font-size:65%">O ajustá la frecuencia clickeando/ajustando sobre la escala.</span>
   <br>
   <hr>
-  <b>Memories:</b>
+  <b>Memorias:</b>
   <div id="memories" class="memories"></div>
   </div>
 </div>
@@ -130,21 +129,21 @@ Your browser does not seem to support HTML5 WebAudio; please try a recent versio
   <input id="autonotchcheckbox" title="automatically filter out interfering carrier (beep/whistle)" type="checkbox" value="" onclick="setautonotch(this.checked)">autonotch
   <br>
   <span id="volumecontrol" style="white-space:nowrap; width:50%">
-    Volume:
+    Volumen:
     <input type="range" min="-20" max="6" id="volumecontrol2" name="volume" value="0" step="1"
     oninput="soundapplet.setvolume(Math.pow(10,this.value/10.))"
     onchange="soundapplet.setvolume(Math.pow(10,this.value/10.))">
   </span>
   <div id="record_span" style="display:none">
     <hr>
-    <b>Audio recording: </b>
-    <button id="recbutton" onclick="record_click(); return false">start</button>
+    <b>Grabador de audio: </b>
+    <button id="recbutton" onclick="record_click(); return false">iniciar</button>
     <span id="reccontrol"></span>
     <br>
     <div id="recwarning" style="width:300px; display:none; font-size:-1; color:red">Your browser does not seem to support downloading the recording; please try a recent version of Firefox, Chrome or Opera.</div>
   </div>
   <hr>
-    <b>Signal strength plot:</b>
+    <b>Mostrar nivel de señal:</b>
     <select id="sgraphchoice">
       <option value=0>none</option>
       <option value=1>fast</option>
@@ -158,7 +157,7 @@ Your browser does not seem to support HTML5 WebAudio; please try a recent versio
 
 <div class="hideblind">
 <div class="ctl block">
-  <b>Waterfall view:</b>
+  <b>Cascada:</b>
   <br>
   <table>
     <tr>
@@ -174,29 +173,29 @@ Your browser does not seem to support HTML5 WebAudio; please try a recent versio
     </td>
     </tr>
     <tr><td>
-  <span style="font-size:65%">Or use scroll wheel and dragging on waterfall.</span>
+  <span style="font-size:65%">O usá la rueda del mouse en la cascada.</span>
     </td></tr>
     <tr><td>
-    Speed:
+    Velocidad:
     <select id="wfspeed" onchange="waterfallspeed(this.value)">
-      <option value="4">slow</option>
-      <option value="2">medium</option>
-      <option value="1">fast</option>
+      <option value="6">lento</option>
+      <option value="2">medio</option>
+      <option value="1">rapido</option>
     </select>
     <br>
-    Size:
+    Tamaño:
     <select id="wfsize" onchange="waterfallheight(this.value)">
-      <option value="50">small</option>
-      <option selected value="100">medium</option>
-      <option value="200">large</option>
+      <option value="50">pequeño</option>
+      <option selected value="100">mediano</option>
+      <option value="200">grande</option>
     </select>
     <br>
-    View:
+    Vista:
     <select id="wfmode" onchange="waterfallmode(this.value)">
-      <option value="0">spectrum</option>
-      <option selected value="1">waterfall</option>
-      <option value="2">weak sigs</option>
-      <option value="3">strong sigs</option>
+      <option value="0">espectro</option>
+      <option selected value="1">cascada</option>
+      <option value="2">señales debiles</option>
+      <option value="3">señales fuertes</option>
     </select>
     </td></tr>
     <tr><td>
@@ -208,7 +207,7 @@ Your browser does not seem to support HTML5 WebAudio; please try a recent versio
 
 </div>
 <div class="ctl block">
-  <b>Bandwidth: </b>
+  <b>Ancho de banda: </b>
   <br>
   <b><span id="numericalbandwidth6">?</span></b> kHz @ -6dB;
   <b><span id="numericalbandwidth60">?</span></b> kHz @ -60dB.
@@ -230,24 +229,24 @@ Your browser does not seem to support HTML5 WebAudio; please try a recent versio
     </tr>
   </table>
   <span class="hideblind">
-  <span style="font-size:65%">Or drag the passband edges on the frequency scale.</span>
+  <span style="font-size:65%">O ajustá la frecuencia clickeando/ajustando sobre la escala.</span>
   </span>
 </div>
 
 
 <div class="ctl block">
-  <b>Logbook:</b>
+  <b>Libro de guardia:</b>
   <form name="logform" action="#">
-  Call of station that you hear: <input type="text" size=12 name="call" onclick="">
+  Licencia de la estación que escuchaste: <input type="text" size=12 name="call" onclick="">
   <br>
-  Comments, if any: <input type="text" size=30 name="comment" onclick="">
+  Comentarios: <input type="text" size=30 name="comment" onclick="">
   <input type="button" value="submit" onclick="return sendlog()">
   </form>
   <span style="font-size:80%">
-    Note: time, frequency, your name/call, and DXCC information are added automatically.
+    Nota: fecha, frecuencia, tu nombre/licencia e información DX es agregada automaticamente.
     <br>
-    View the <a href="~~logbook?nr=20">last 20 lines of the logbook</a>,
-    or the <a href="logbook.txt">entire logbook</a> (ctrl-click for new tab/window).
+    Ver <a href="~~logbook?nr=20">ultimas 20 entradas del libro de guardia</a>,
+    o el  <a href="logbook.txt">libro de guardia completo</a>.
   </span>
 </div>
 
@@ -256,21 +255,20 @@ Your browser does not seem to support HTML5 WebAudio; please try a recent versio
 
 
 <form name="form1" action="#">
-This WebSDR is currently being used by <span id=numusers>?</span> user(s) simultaneously:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<input id="compactviewcheckbox" type="checkbox" name="compactview" value="" onclick="setcompactview(this.checked)">compact view
+Este WebSDR está siendo utilizado por <span id=numusers>?</span> usuario(s) de forma simultanea:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input id="compactviewcheckbox" type="checkbox" name="compactview" value="" onclick="setcompactview(this.checked)">vista compacta
 <br>
 <div id=users></div>
 </form>
 <hr>
-
 <div id="chatboxspan">
 <p><b>Chatbox:</b><br>
 <span style="font-size:80%">
-This chatbox is intended to discuss the operation of the WebSDR.
+Este chat está ideado para discutir sobre la operación de WebSDR.
 <br>
-The operators of this site disclaim any responsibility for text appearing in this chatbox.
+Los operadores de este sitio niegan cualquier responsabilidad por los textos escritos en este chatbox.
 </span>
-<div id="chatboxnew" style="background-color:#c0ffff; overflow:auto; height:250px; width:100%; font-family: monospace"></div>
+<div id="chatboxnew" style="background-color:#bdbfbb; overflow:auto; height:250px; width:100%; font-family: monospace"></div>
 <br>
 <form name="chatform" onsubmit="return sendchat()" action="#">
 <input type="text" size=80 name="chat" onclick="">
@@ -278,10 +276,11 @@ The operators of this site disclaim any responsibility for text appearing in thi
 </form>
 <br>
 </div>
+<a href="https://info.flagcounter.com/5wzC"><img src="https://s11.flagcounter.com/count2/5wzC/bg_FFFFFF/txt_000000/border_CCCCCC/columns_8/maxflags_56/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Free counters!" border="0"></a>
 
 <hr>
 <div style="font-size:80%">
-Statistics:
+Estadisticas:
 <div id="stats"></div>
 </div>
 
@@ -290,6 +289,5 @@ Statistics:
 <hr>
 
 <div id="soundappletdiv"></div>
-
 
 </div>

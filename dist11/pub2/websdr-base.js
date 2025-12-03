@@ -5,7 +5,7 @@
 
 
 // variables governing what the user listens to:
-var lo = -2.7, hi = -0.3;   // edges of passband, in kHz w.r.t. the carrier
+var lo = -2.4, hi = -0.1;   // edges of passband, in kHz w.r.t. the carrier
 var mode = "LSB";            // 1 if AM, 0 otherwise (SSB/CW); or text "AM", "FM" etc
 var band = 0;            // id of the band we're listening to
 var freq = bandinfo[0].vfo;  // frequency (of the carrier) in kHz
@@ -18,7 +18,7 @@ var view = Views.blind;
 var nwaterfalls = 0;
 var waterslowness = 4;
 var waterheight = 100;
-var watermode = 3;
+var watermode = 1;
 var scaleheight = 14;
 
 
@@ -386,8 +386,8 @@ function setmf(m, l, h)   // "set mode and filter"
 function set_mode(m)      // ...with appropriate filter
 {
    switch (m.toUpperCase()) {
-      case "USB": setmf("usb", 0.3, 2.7); break;
-      case "LSB": setmf("lsb", -2.7, -0.3); break;
+      case "USB": setmf("usb", 0.0, 2.4); break;
+      case "LSB": setmf("lsb", -2.4, -0.0); break;
       case "AM": setmf("am", -4, 4); break;
       case "CW": setmf("cw", -0.95, -0.55); break;
       case "FM": setmf("fm", -8, 8); break;
@@ -1005,6 +1005,9 @@ function waterfallappletstarted(id) {
    if (waitingforwaterfalls < 0) waitingforwaterfalls = 0; // shouldn't happen...
    if (waitingforwaterfalls != 0) return;
    setTimeout('allwaterfallappletsstarted()', 100);
+
+   waterfallapplet[0].setzoom(-2, 371);
+   waterfallapplet[0].setzoom(-2, 512);
 }
 
 function allwaterfallappletsstarted() {
@@ -1095,6 +1098,7 @@ function iOS_audio_start() {
    s.connect(document.ct.destination);
    try { s.start(0); } catch (e) { s.noteOn(0); }
 }
+
 function chrome_audio_start() {
    // Chrome only plays webaudio after it has been started by clicking a button, so this function must be called from a button's onclick handler
    // Source: https://www.sdrutah.org/info/chrome_WebSDR_fix.html
@@ -1121,7 +1125,6 @@ function html5orjavamenu() {
    sup_iOS = 0;   // global!
    sup_android = 0;   // global!
    sup_chrome = 0;  // global!
-   sup_chrome = 0;  // global!
    try {
       var n = navigator.userAgent.toLowerCase();
       if (n.indexOf('iphone') != -1) sup_iOS = 1;
@@ -1141,18 +1144,18 @@ function html5orjavamenu() {
    usejavasound = (usecookie.substring(1, 2) == 'y');
 
    var javacolor = checkjava();
-   s = '<b>Waterfall:</b>';
+   s = '<b>Cascada:</b>';
    s += '<span style="color: ' + javacolor + '"><input type="radio" name="groupw" value="Java" onclick="html5orjava(0,1);"' + (usejavawaterfall ? " checked" : "") + '>Java</span>';
    if (sup_socket && sup_canvas) s += '<span style="color:green">'; else s += '<span style="color:red">';
    s += '<input type="radio" name="groupw" value="HTML5" onclick="html5orjava(0,0);"' + (!usejavawaterfall ? " checked" : "") + '>HTML5</span>';
-   s += '&nbsp;&nbsp;&nbsp;<b>Sound:</b>';
+   s += '&nbsp;&nbsp;&nbsp;<b>Sonido:</b>';
    s += '<span style="color: ' + javacolor + '"><input type="radio" name="groupa" value="Java" onclick="html5orjava(1,1);"' + (usejavasound ? " checked" : "") + '>Java</span>';
    if (sup_socket && sup_webaudio) s += '<span style="color: green">';
    else if (sup_socket && sup_mozaudio) s += '<span style="color: blue">';
    else s += '<span style="color: red">';
    s += '<input type="radio" name="groupa" value="HTML5" onclick="html5orjava(1,0);"' + (!usejavasound ? " checked" : "") + '>HTML5</span>';
    if (sup_iOS && sup_socket && sup_webaudio) s += '<input type="button" value="iOS audio start" onclick="iOS_audio_start()">';
-   if (sup_chrome && sup_socket && sup_webaudio) s += '<input type="button" value="Iniciar audio" onclick="chrome_audio_start()">';
+   //   if (sup_chrome && sup_socket && sup_webaudio) s+='<input type="button" value="Iniciar audio" onclick="chrome_audio_start()">';
    document.getElementById('html5choice').innerHTML = s;
    document.getElementById('record_span').style.display = usejavasound ? "none" : "inline";
 }
@@ -1168,10 +1171,10 @@ function bodyonload() {
    if (view == null) view = Views.oneband;
    if (nvbands >= 2) s = '<input type="radio" name="group" value="all bands" onclick="setview(0);">all bands<input type="radio" name="group" value="others slow" onclick="setview(1);" >others slow<input type="radio" name="group" value="one band" onclick="setview(2);" >one band';
    else {
-      s = '<input type="radio" name="group" value="waterfall" onclick="setview(2);">waterfall';
+      s = '<input type="radio" name="group" value="waterfall" onclick="setview(2);">cascada';
       if (view == Views.othersslow || view == Views.allbands) view = Views.oneband;
    }
-   s += '<input type="radio" name="group" value="blind" onclick="setview(3);" >blind';
+   s += '<input type="radio" name="group" value="blind" onclick="setview(3);" >apagado';
    document.getElementById('viewformbuttons').innerHTML = s;
    if (nvbands >= 2) document.viewform.group[view].checked = true;
    else document.viewform.group[view - 2].checked = true;
@@ -1582,7 +1585,7 @@ function document_username() {
       document.write('<input type="text" value="" name="username" onchange="setusernamecookie()" onclick=""></a>');
       document.usernameform.username.value = x;
    } else {
-      document.write('<a id="please"><span id="please1"><b><i>Please log in by typing your name or callsign here (it will be saved for later visits in a cookie):<\/i><\/b></span> ');
+      document.write('<a id="please"><span id="please1"><b><i>Ingrese su nombre o licencia aquí:<\/i><\/b></span> ');
       document.write('<input type="text" value="" name="username" onchange="setusernamecookie()" onclick=""></a>');
    }
 }
