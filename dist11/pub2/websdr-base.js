@@ -401,14 +401,25 @@ function freqstep(st)
 // magnitude of st is 1,2 or 3 for small, medium, or large step, with large being one channel (where applicable)
 {
    var f = nominalfreq();
-
-   var steps_ssb = [bandinfo[band].tuningstep, 0.5, 2.5];
-   var steps_am5 = [0.1, 1, 5];
-   var steps_am9 = [0.1, 1, 9];
-   var steps_fm = [1, 5, 12.5];
-   var steps = steps_ssb;
-   var grid = false;
-   var i = Math.abs(st) - 1;
+   if (st == "9") {
+      if (mode == "CW") {
+         f = Math.round(f);
+         setfreq(f - (hi + lo) / 2);
+      }
+      else {
+         f = Math.round(f);
+         setfreq(f);
+      }
+   }
+   else {
+      var steps_ssb = [0.1, 0.5, 1];
+      var steps_am5 = [0.1, 1, 5];
+      var steps_am9 = [0.1, 1, 10];
+      var steps_fm = [1, 5, 12.5];
+      var steps = steps_ssb;
+      var grid = false;
+      var i = Math.abs(st) - 1;
+   }
    if (mode == "AM") {
       if (freq < 1800) steps = steps_am9; else steps = steps_am5;
       if (i >= 1) grid = true;
