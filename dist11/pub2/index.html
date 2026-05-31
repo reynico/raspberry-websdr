@@ -22,20 +22,100 @@ El conocimiento humano pertenece al mundo. Toda la configuración de este WebSDR
 </p>
 <button class="custombutton button3" onclick="chrome_audio_start()">Iniciar audio</button>
 <button class="custombutton" onclick="window.location.href = 'm.html';" >Version movil</button>
-<button class="custombutton button2" onclick="window.location.href = 'http://lu5dnpwebsdr.sytes.net:8901/';">LU5DNP</button>
-<button class="custombutton button2" onclick="window.location.href = 'http://lu6flz.no-ip.org:7999/';">LU6FLZ</button>
-<button class="custombutton button2" onclick="window.location.href = 'http://lu3dj.ddns.net:8081/';">LU3DJ 20m</button>
-<button class="custombutton button2" onclick="window.location.href = 'http://lu6psg.ddns.net/';">LU6PSG</button>
-<button class="custombutton button2" onclick="window.location.href = 'http://45.7.98.72:8080/';">LU9FZL</button>
-<button class="custombutton button2" onclick="window.location.href = 'http://200.69.250.189:5555/';">LU3HBS</button>
-<button class="custombutton button2" onclick="window.location.href = 'http://el22.dyndns-blog.com:8080/';">LU8FCJ</button>
-<button class="custombutton button2" onclick="window.location.href = 'http://lu1jgu.ddns.net:8080/';">LU1JGU</button>
+
+<span id="otros-sdr"></span>
 
 </div>
 <hr>
 
 
 <!--#include file="websdr-controls.html"-->
+
+<script>
+(function () {
+  var MANUAL = [
+    { call: "LU3ARN", url: "https://sdr.nico.ninja:8443/" },
+    { call: "LU1XA",  url: "http://138.118.215.154:8073/" }
+  ];
+
+  var CALL_RE = /\bL[UW]\d[A-Z]{1,4}\b/i;
+
+  function callsign(e) {
+    var m = CALL_RE.exec(e.desc || "") || CALL_RE.exec(e.url || "");
+    return m ? m[0].toUpperCase() : null;
+  }
+  function isArgentine(e) {
+    return !!callsign(e);
+  }
+  function host(url) {
+    try { return new URL(url).hostname.toLowerCase(); } catch (_) { return ""; }
+  }
+  function addButton(box, label, url, title) {
+    var b = document.createElement("button");
+    b.className = "custombutton button2";
+    b.textContent = label;
+    if (title) b.title = title;
+    b.onclick = function () { window.location.href = url; };
+    box.appendChild(b);
+  }
+
+  function render() {
+    var box = document.getElementById("otros-sdr");
+    if (!box) return;
+    var here = location.hostname.toLowerCase();
+    var seen = {};
+
+    if (typeof sdrs !== "undefined" && sdrs.length) {
+      var best = {};
+      sdrs.forEach(function (e) {
+        if (!isArgentine(e)) return;
+        var h = host(e.url);
+        if (!h || h === here) return;
+        var call = callsign(e) || h;
+        if (!best[call] || (+e.users) > (+best[call].users)) {
+          best[call] = { users: e.users, url: e.url };
+        }
+      });
+      Object.keys(best).sort(function (a, b) {
+        return (+best[b].users) - (+best[a].users);
+      }).forEach(function (call) {
+        seen[call] = true;
+        addButton(box, call, best[call].url, best[call].users + " listeners");
+      });
+    }
+
+    MANUAL.forEach(function (m) {
+      var key = (callsign(m) || m.call).toUpperCase();
+      if (seen[key]) return;
+      seen[key] = true;
+      addButton(box, m.call, m.url);
+    });
+  }
+
+  function loadList() {
+    var tag = document.createElement("script");
+    tag.src = "http://websdr.ewi.utwente.nl/~~websdrlistk?v=1&fmt=0&chseq=0";
+    tag.async = true;
+    tag.onload = render;
+    tag.onerror = render;
+    document.head.appendChild(tag);
+  }
+
+  function lazyLoad() {
+    if (window.requestIdleCallback) {
+      requestIdleCallback(loadList, { timeout: 4000 });
+    } else {
+      setTimeout(loadList, 1500);
+    }
+  }
+
+  if (document.readyState === "complete") {
+    lazyLoad();
+  } else {
+    window.addEventListener("load", lazyLoad);
+  }
+})();
+</script>
 
 </body>
 </html>
